@@ -31,11 +31,11 @@ Wybór: """))
 def data_load():
     print("""
 Wybierz numer funkcji ktorej chcesz uzyc w programie:
-    1. FUNKCJA LINIOWA: x + 18
+    1. FUNKCJA LINIOWA: x - 3
     2. FUNKCJA: |x|
-    3. FUNKCJA WIELOMIANOWA:  4 * x^3 + 2 * x^2 - 8 * x + 4
-    4. FUNKCJA TRYGONOMETRYCZNA:  8 * cos(x) - 2 * sin(x)
-    5. FUNKCJA ZŁOŻONA:  |cos(x - 1) - 0.8|""")
+    3. FUNKCJA WIELOMIANOWA:  2 * x^3 + 1 * x^2 - 3 * x + 7
+    4. FUNKCJA TRYGONOMETRYCZNA:  4 * cos(x) + 6 * sin(x)
+    5. FUNKCJA ZŁOŻONA:  |sin(x + 2) - 1.6|""")
     function_number = int(input("""
 Wybór: """))
     while function_number not in [1, 2, 3, 4, 5]:

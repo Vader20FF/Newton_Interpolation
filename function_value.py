@@ -10,15 +10,15 @@ def get_function_value(x, function_number):
     :return: value of the given function
     """
     if function_number == 1:
-        return x + 18
+        return x - 3
     elif function_number == 2:
         return abs(x)
     elif function_number == 3:
-        return get_polynomial_value([4, 2, -8, 1], x)
+        return get_polynomial_value([2, 1, -3, 7], x)
     elif function_number == 4:
-        return 8 * np.cos(x) - 2 * np.sin(x)
+        return 4 * np.cos(x) + 6 * np.sin(x)
     elif function_number == 5:
-        return abs(np.cos(x - 1) - 0.8)
+        return abs(np.sin(x + 2) - 1.6)
     else:
         print("""
 Przekazano nieprawidlowa wartosc numeru wzoru funkcji do metody "wartoscFunkcji" """)
