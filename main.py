@@ -2,8 +2,9 @@ from sys import exit as exitProgram
 from graph import generate_graph
 from function_value import get_function_value
 from horner import get_polynomial_value
-from interpolacja import *
+from interpolation_functions import forward_interpolation, backwards_interpolation
 import numpy as np
+import sympy as sp
 
 
 def menu():
@@ -72,19 +73,22 @@ Podaj liczbę węzłów interpolacji: """))
                  interpolation_values)
 
 
-def calculations(function_arguments, x_pkt_inter, y_pkt_inter):
+def calculations(function_arguments, interpolation_arguments, interpolation_values):
     x = sp.Symbol('x')
-    forward_interpolation_formula = interpolacja_wprzod(x_pkt_inter, y_pkt_inter)
-    backward_interpolation_formula = interpolacja_wstecz(x_pkt_inter, y_pkt_inter)
+    forward_interpolation_formula = forward_interpolation(interpolation_arguments, interpolation_values)
+    print(forward_interpolation_formula)
+    backward_interpolation_formula = backwards_interpolation(interpolation_arguments, interpolation_values)
+    print(backward_interpolation_formula)
     forward_interpolation_coefficients = sp.Poly(forward_interpolation_formula, x).all_coeffs()
+    print(forward_interpolation_coefficients)
     backward_interpolation_coefficients = sp.Poly(backward_interpolation_formula, x).all_coeffs()
+    print(backward_interpolation_coefficients)
     polynomial_values = []
     for argument in function_arguments:
         if argument < (function_arguments[-1] + function_arguments[0]) / 2:
             polynomial_values.append(get_polynomial_value(forward_interpolation_coefficients, argument))
         else:
             polynomial_values.append(get_polynomial_value(backward_interpolation_coefficients, argument))
-
     return polynomial_values
 
 

@@ -3,6 +3,11 @@ import sympy as sp
 
 
 def get_function_formula(function_number):
+    """
+    Function returning a formula from a number of built-in function
+    :param function_number: a number of the given function
+    :return: formula of the given function number
+    """
     x = sp.Symbol('x')
     if function_number == 1:
         return x + 18

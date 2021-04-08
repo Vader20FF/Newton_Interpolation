@@ -1,4 +1,9 @@
 def get_factorial(n):
+    """
+    Function returning a factorial of given number n
+    :param n: int number
+    :return: factorial of n
+    """
     factorial_temp = 1
     if n in (0, 1):
         return 1
