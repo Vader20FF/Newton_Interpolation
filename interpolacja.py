@@ -1,4 +1,4 @@
-from silnia import silnia_iter as silnia
+from factorial import get_factorial as factorial
 import sympy as sp
 
 
@@ -32,7 +32,7 @@ def interpolacja_wprzod(tab_x, tab_y):
     q = (args_x - tab_x[0])/h
     wspolczynniki = []
     for i in range(liczba_wezlow):
-        wspolczynniki.append(round(delta_y[i][0]/silnia(i), 4))
+        wspolczynniki.append(round(delta_y[i][0] / factorial(i), 4))
     wielomian = [wspolczynniki[0], q * wspolczynniki[1]]
     wspolczynniki_kopia = wspolczynniki.copy()
     wspolczynnik = wspolczynniki[-1]
@@ -67,7 +67,7 @@ def interpolacja_wstecz(tab_x, tab_y):
     delta_y = roznice_skonczone(tab_y)
     wspolczynniki = []
     for i in range(liczba_wezlow):
-        wspolczynniki.append(round(delta_y[i][-1] / silnia(i), 4))
+        wspolczynniki.append(round(delta_y[i][-1] / factorial(i), 4))
     wielomian = [wspolczynniki[0], q * wspolczynniki[1]]
     wspolczynniki_kopia = wspolczynniki.copy()
     wspolczynnik = wspolczynniki[-1]

@@ -1,18 +1,18 @@
-from horner import horner
+from horner import get_polynomial_value
 import sympy as sp
 
 
-def wzorFunkcji(numerFunkcji):
+def get_function_formula(function_number):
     x = sp.Symbol('x')
-    if numerFunkcji == 1:
+    if function_number == 1:
         return x + 18
-    elif numerFunkcji == 2:
+    elif function_number == 2:
         return abs(x)
-    elif numerFunkcji == 3:
-        return horner([4, 2, -8, 1], x)
-    elif numerFunkcji == 4:
+    elif function_number == 3:
+        return get_polynomial_value([4, 2, -8, 1], x)
+    elif function_number == 4:
         return 8 * sp.cos(x) - 2 * sp.sin(x)
-    elif numerFunkcji == 5:
+    elif function_number == 5:
         return abs(sp.cos(x - 1) - 0.8)
     else:
         print("""

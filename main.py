@@ -1,7 +1,7 @@
 from sys import exit as exitProgram
-from wykres import generowanieWykresu
-from wartoscFunkcji import wartoscFunkcji
-from horner import horner
+from graph import generate_graph
+from function_value import get_function_value
+from horner import get_polynomial_value
 from interpolacja import *
 import numpy as np
 
@@ -14,20 +14,20 @@ def menu():
 Metoda interpolacji Newtona dla węzłów równoodległych
 Lukasz Janiszewski, Maciej Kubis""")
         print("""
-Wybierz opcje:
+Wybierz opcję:
 1. Rozpocznij program
 2. Zakończ program""")
-        wyborUzytkownika = int(input("""
+        user_choice = int(input("""
 Wybór: """))
-        if wyborUzytkownika == 1:
-            wczytywanieDanych()
-        elif wyborUzytkownika == 2:
+        if user_choice == 1:
+            data_load()
+        elif user_choice == 2:
             exitProgram()
         else:
             print("""Wybrano nieprawidlowa opcje!""")
 
 
-def wczytywanieDanych():
+def data_load():
     print("""
 Wybierz numer funkcji ktorej chcesz uzyc w programie:
     1. FUNKCJA LINIOWA: x + 18
@@ -35,64 +35,63 @@ Wybierz numer funkcji ktorej chcesz uzyc w programie:
     3. FUNKCJA WIELOMIANOWA:  4 * x^3 + 2 * x^2 - 8 * x + 4
     4. FUNKCJA TRYGONOMETRYCZNA:  8 * cos(x) - 2 * sin(x)
     5. FUNKCJA ZŁOŻONA:  |cos(x - 1) - 0.8|""")
-    numerFunkcji = int(input("""
+    function_number = int(input("""
 Wybór: """))
-    while numerFunkcji not in [1, 2, 3, 4, 5]:
-        poprawnaLiczba = False
-        while not poprawnaLiczba:
-            numerFunkcji = int(input("""
+    while function_number not in [1, 2, 3, 4, 5]:
+        valid_number = False
+        while not valid_number:
+            function_number = int(input("""
                 Wybierz jeszcze raz numer funkcji: """))
-            if numerFunkcji in [1, 2, 3, 4, 5]:
-                poprawnaLiczba = True
+            if function_number in [1, 2, 3, 4, 5]:
+                valid_number = True
 
-    lewaGranica = float(input("""
+    left_border = float(input("""
 Podaj lewa granice przedziału interpolacji: """))
-    prawaGranica = float(input("""Podaj prawa granice przedziału interpolacji: """))
+    right_border = float(input("""Podaj prawa granice przedziału interpolacji: """))
 
-    liczbaWezlow = int(input("""
+    nodes_number = int(input("""
 Podaj liczbę węzłów interpolacji: """))
-    while liczbaWezlow < 1:
+    while nodes_number < 1:
         print("Podaj liczbę węzłów interpolacji większą od 1!")
-        liczbaWezlow = int(input("""
+        nodes_number = int(input("""
 Podaj liczbę węzłów interpolacji: """))
 
-    argumenty = list(np.linspace(lewaGranica, prawaGranica, 1000))
+    function_arguments = list(np.linspace(left_border, right_border, 1000))
 
-    wartosciFunkcji = []
-    for x in argumenty:
-        wartosciFunkcji.append(wartoscFunkcji(x, numerFunkcji))
+    function_values = []
+    for x in function_arguments:
+        function_values.append(get_function_value(x, function_number))
 
-    x_pkt_inter = np.linspace(lewaGranica, prawaGranica, liczbaWezlow)
-    y_pkt_inter = list(wartoscFunkcji(x_pkt_inter, numerFunkcji))
-    x_pkt_inter = list(x_pkt_inter)
+    interpolation_arguments = np.linspace(left_border, right_border, nodes_number)
+    interpolation_values = list(get_function_value(interpolation_arguments, function_number))
+    interpolation_arguments = list(interpolation_arguments)
 
-    wartosciWielomianu = obliczenia(lewaGranica, prawaGranica, liczbaWezlow, numerFunkcji, argumenty, x_pkt_inter,
-                                   y_pkt_inter)
+    polynomial_values = calculations(function_arguments, interpolation_arguments, interpolation_values)
 
-    prezentacja(lewaGranica, prawaGranica, argumenty, wartosciFunkcji, wartosciWielomianu, liczbaWezlow, numerFunkcji,
-                x_pkt_inter, y_pkt_inter)
+    presentation(function_arguments, function_values, polynomial_values, function_number, interpolation_arguments,
+                 interpolation_values)
 
 
-def obliczenia(lewaGranica, prawaGranica, liczbaWezlow, numerFunkcji, argumenty, x_pkt_inter, y_pkt_inter):
+def calculations(function_arguments, x_pkt_inter, y_pkt_inter):
     x = sp.Symbol('x')
-    wzor_interpolacji_wprzod = interpolacja_wprzod(x_pkt_inter, y_pkt_inter)
-    wzor_interpolacji_wstecz = interpolacja_wstecz(x_pkt_inter, y_pkt_inter)
-    wspolczynniki_interpolacji_wprzod = sp.Poly(wzor_interpolacji_wprzod, x).all_coeffs()
-    wspolczynniki_interpolacji_wstecz = sp.Poly(wzor_interpolacji_wstecz, x).all_coeffs()
-    wartosci = []
-    for argument in argumenty:
-        if argument < (argumenty[-1] + argumenty[0]) / 2:
-            wartosci.append(horner(wspolczynniki_interpolacji_wprzod, argument))
+    forward_interpolation_formula = interpolacja_wprzod(x_pkt_inter, y_pkt_inter)
+    backward_interpolation_formula = interpolacja_wstecz(x_pkt_inter, y_pkt_inter)
+    forward_interpolation_coefficients = sp.Poly(forward_interpolation_formula, x).all_coeffs()
+    backward_interpolation_coefficients = sp.Poly(backward_interpolation_formula, x).all_coeffs()
+    polynomial_values = []
+    for argument in function_arguments:
+        if argument < (function_arguments[-1] + function_arguments[0]) / 2:
+            polynomial_values.append(get_polynomial_value(forward_interpolation_coefficients, argument))
         else:
-            wartosci.append(horner(wspolczynniki_interpolacji_wstecz, argument))
+            polynomial_values.append(get_polynomial_value(backward_interpolation_coefficients, argument))
 
-    return wartosci
+    return polynomial_values
 
 
-def prezentacja(lewaGranica, prawaGranica, argumenty, wartosciFunkcji, wartosciWielomianu, liczbaWezlow, numerFunkcji,
-                x_pkt_inter, y_pkt_inter):
-    generowanieWykresu(lewaGranica, prawaGranica, argumenty, wartosciFunkcji, wartosciWielomianu, liczbaWezlow,
-                       numerFunkcji, x_pkt_inter, y_pkt_inter)
+def presentation(function_arguments, function_values, polynomial_values, function_number, interpolation_arguments,
+                 interpolation_values):
+    generate_graph(function_arguments, function_values, polynomial_values, function_number, interpolation_arguments,
+                   interpolation_values)
 
 
 ##########################################################################
