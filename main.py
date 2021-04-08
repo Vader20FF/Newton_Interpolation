@@ -2,7 +2,6 @@ from sys import exit as exitProgram
 from wykres import generowanieWykresu
 from wartoscFunkcji import wartoscFunkcji
 from horner import horner
-from wzorFunkcji import wzorFunkcji
 from interpolacja import *
 import numpy as np
 
@@ -67,10 +66,11 @@ Podaj liczbę węzłów interpolacji: """))
     y_pkt_inter = list(wartoscFunkcji(x_pkt_inter, numerFunkcji))
     x_pkt_inter = list(x_pkt_inter)
 
-    obliczoneWartosci = obliczenia(lewaGranica, prawaGranica, liczbaWezlow, numerFunkcji, argumenty, x_pkt_inter,
+    wartosciWielomianu = obliczenia(lewaGranica, prawaGranica, liczbaWezlow, numerFunkcji, argumenty, x_pkt_inter,
                                    y_pkt_inter)
 
-    prezentacja(lewaGranica, prawaGranica, argumenty, obliczoneWartosci, x_pkt_inter, y_pkt_inter)
+    prezentacja(lewaGranica, prawaGranica, argumenty, wartosciFunkcji, wartosciWielomianu, liczbaWezlow, numerFunkcji,
+                x_pkt_inter, y_pkt_inter)
 
 
 def obliczenia(lewaGranica, prawaGranica, liczbaWezlow, numerFunkcji, argumenty, x_pkt_inter, y_pkt_inter):
@@ -89,10 +89,10 @@ def obliczenia(lewaGranica, prawaGranica, liczbaWezlow, numerFunkcji, argumenty,
     return wartosci
 
 
-def prezentacja(lewaGranica, prawaGranica, argumenty, wartosciFunkcji, liczbaWezlow, numerFunkcji, x_pkt_inter,
-                y_pkt_inter):
-    generowanieWykresu(lewaGranica, prawaGranica, argumenty, wartosciFunkcji, liczbaWezlow, numerFunkcji, x_pkt_inter,
-                       y_pkt_inter)
+def prezentacja(lewaGranica, prawaGranica, argumenty, wartosciFunkcji, wartosciWielomianu, liczbaWezlow, numerFunkcji,
+                x_pkt_inter, y_pkt_inter):
+    generowanieWykresu(lewaGranica, prawaGranica, argumenty, wartosciFunkcji, wartosciWielomianu, liczbaWezlow,
+                       numerFunkcji, x_pkt_inter, y_pkt_inter)
 
 
 ##########################################################################
